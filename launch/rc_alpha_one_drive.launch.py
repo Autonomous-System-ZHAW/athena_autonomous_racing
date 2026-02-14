@@ -4,7 +4,7 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
 import os
-from launch.launch_description_sources import XMLLaunchDescriptionSource
+from launch_xml.launch_description_sources import XMLLaunchDescriptionSource
 
 
 def generate_launch_description():
@@ -28,8 +28,14 @@ def generate_launch_description():
         )
     )
 
+    vesc_to_odom_node = Node(
+        package="vesc_ackermann",
+        executable="vesc_to_odom_node",
+        output="screen",
+    )
+
     ackermann_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
+        XMLLaunchDescriptionSource(
             os.path.join(
                 get_package_share_directory("vesc_ackermann"),
                 "launch",
@@ -48,13 +54,21 @@ def generate_launch_description():
         )
     )
 
-    remote_control_node = Node(
+    remote_control = Node(
         package="athena_remote_control",
         executable="remote_autonomous_control_node",
         output="screen",
     )
 
     joy_node = Node(package="joy", executable="joy_node", output="screen")
+
+    state_machine = Node(
+        package="athena_lifecycle_state_machine",
+        executable="state_machine",
+        output="screen",
+    )
+
+    """
 
     foxglove_launch = IncludeLaunchDescription(
         XMLLaunchDescriptionSource(
@@ -65,6 +79,7 @@ def generate_launch_description():
             )
         )
     )
+    """
 
     return LaunchDescription(
         [
@@ -72,8 +87,9 @@ def generate_launch_description():
             vesc_driver_launch,
             ackermann_launch,
             follow_the_gap_launch,
-            remote_control_node,
+            remote_control,
             joy_node,
-            foxglove_launch,
+            state_machine,
+            # foxglove_launch,
         ]
     )
