@@ -4,6 +4,7 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
 import os
+from launch.launch_description_sources import XMLLaunchDescriptionSource
 
 
 def generate_launch_description():
@@ -47,11 +48,22 @@ def generate_launch_description():
         )
     )
 
-    smacc2_node = Node(
-        package="sm_my_robot",
-        executable="sm_my_robot_node",
-        name="state_machine",
+    remote_control_node = Node(
+        package="athena_remote_control",
+        executable="remote_autonomous_control_node",
         output="screen",
+    )
+
+    joy_node = Node(package="joy", executable="joy_node", output="screen")
+
+    foxglove_launch = IncludeLaunchDescription(
+        XMLLaunchDescriptionSource(
+            os.path.join(
+                get_package_share_directory("foxglove_bridge"),
+                "launch",
+                "foxglove_bridge_launch.xml",
+            )
+        )
     )
 
     return LaunchDescription(
@@ -60,6 +72,8 @@ def generate_launch_description():
             vesc_driver_launch,
             ackermann_launch,
             follow_the_gap_launch,
-            smacc2_node,
+            remote_control_node,
+            joy_node,
+            foxglove_launch,
         ]
     )
