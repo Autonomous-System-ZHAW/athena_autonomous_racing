@@ -56,7 +56,7 @@ def generate_launch_description():
 
     remote_control = Node(
         package="athena_remote_control",
-        executable="remote_autonomous_control_node",
+        executable="remote_control",
         output="screen",
     )
 
