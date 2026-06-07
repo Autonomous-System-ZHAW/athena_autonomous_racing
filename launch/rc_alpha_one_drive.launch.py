@@ -79,7 +79,6 @@ def generate_launch_description():
     )
 
     """
-
     foxglove_launch = IncludeLaunchDescription(
         XMLLaunchDescriptionSource(
             os.path.join(
