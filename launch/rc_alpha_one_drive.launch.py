@@ -62,6 +62,16 @@ def generate_launch_description():
 
     joy_node = Node(package="joy", executable="joy_node", output="screen")
 
+    steering_wheel_drive_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(
+                get_package_share_directory("steering_wheel_drive"),
+                "launch",
+                "steering_wheel_drive.launch.py",
+            )
+        )
+    )
+
     state_machine = Node(
         package="athena_lifecycle_state_machine",
         executable="state_machine",
@@ -90,6 +100,7 @@ def generate_launch_description():
             remote_control,
             joy_node,
             state_machine,
+            steering_wheel_drive_launch,
             # foxglove_launch,
         ]
     )
