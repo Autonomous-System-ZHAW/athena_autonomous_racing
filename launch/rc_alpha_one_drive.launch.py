@@ -8,16 +8,6 @@ from launch_xml.launch_description_sources import XMLLaunchDescriptionSource
 
 
 def generate_launch_description():
-    lidar_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(
-                get_package_share_directory("ldlidar_stl_ros2"),
-                "launch",
-                "ld19.launch.py",
-            )
-        )
-    )
-
     vesc_driver_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(
@@ -62,44 +52,19 @@ def generate_launch_description():
 
     joy_node = Node(package="joy", executable="joy_node", output="screen")
 
-    steering_wheel_drive_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(
-                get_package_share_directory("steering_wheel_drive"),
-                "launch",
-                "steering_wheel_drive.launch.py",
-            )
-        )
-    )
-
     state_machine = Node(
         package="athena_lifecycle_state_machine",
         executable="state_machine",
         output="screen",
     )
 
-    """
-    foxglove_launch = IncludeLaunchDescription(
-        XMLLaunchDescriptionSource(
-            os.path.join(
-                get_package_share_directory("foxglove_bridge"),
-                "launch",
-                "foxglove_bridge_launch.xml",
-            )
-        )
-    )
-    """
-
     return LaunchDescription(
         [
-            lidar_launch,
             vesc_driver_launch,
             ackermann_launch,
             follow_the_gap_launch,
             remote_control,
             joy_node,
             state_machine,
-            steering_wheel_drive_launch,
-            # foxglove_launch,
         ]
     )
