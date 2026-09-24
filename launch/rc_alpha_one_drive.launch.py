@@ -8,41 +8,6 @@ from launch_xml.launch_description_sources import XMLLaunchDescriptionSource
 
 
 def generate_launch_description():
-    lidar_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(
-                get_package_share_directory("ldlidar_stl_ros2"),
-                "launch",
-                "ld19.launch.py",
-            )
-        )
-    )
-
-    vesc_driver_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(
-                get_package_share_directory("vesc_driver"),
-                "launch",
-                "vesc_driver_node.launch.py",
-            )
-        )
-    )
-
-    vesc_to_odom_node = Node(
-        package="vesc_ackermann",
-        executable="vesc_to_odom_node",
-        output="screen",
-    )
-
-    ackermann_launch = IncludeLaunchDescription(
-        XMLLaunchDescriptionSource(
-            os.path.join(
-                get_package_share_directory("vesc_ackermann"),
-                "launch",
-                "ackermann_to_vesc_node.launch.xml",
-            )
-        )
-    )
 
     follow_the_gap_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -54,52 +19,44 @@ def generate_launch_description():
         )
     )
 
+    led_manager_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(
+                get_package_share_directory("athena_led_manager"),
+                "launch",
+                "led_manager.launch.py",
+            )
+        )
+    )
+
+    state_machine_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(
+                get_package_share_directory("athena_lifecycle_state_machine"),
+                "launch",
+                "lifecycle_state_machine.launch.py",
+            )
+        )
+    )
+
+    joy_node = Node(
+        package="joy",
+        executable="joy_node",
+        output="screen",
+    )
+
     remote_control = Node(
         package="athena_remote_control",
         executable="remote_control",
         output="screen",
     )
 
-    joy_node = Node(package="joy", executable="joy_node", output="screen")
-
-    steering_wheel_drive_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(
-                get_package_share_directory("steering_wheel_drive"),
-                "launch",
-                "steering_wheel_drive.launch.py",
-            )
-        )
-    )
-
-    state_machine = Node(
-        package="athena_lifecycle_state_machine",
-        executable="state_machine",
-        output="screen",
-    )
-
-    """
-    foxglove_launch = IncludeLaunchDescription(
-        XMLLaunchDescriptionSource(
-            os.path.join(
-                get_package_share_directory("foxglove_bridge"),
-                "launch",
-                "foxglove_bridge_launch.xml",
-            )
-        )
-    )
-    """
-
     return LaunchDescription(
         [
-            lidar_launch,
-            vesc_driver_launch,
-            ackermann_launch,
             follow_the_gap_launch,
-            remote_control,
+            led_manager_launch,
             joy_node,
-            state_machine,
-            steering_wheel_drive_launch,
-            # foxglove_launch,
+            remote_control,
+            state_machine_launch,
         ]
     )
