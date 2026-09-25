@@ -43,7 +43,7 @@ def generate_launch_description():
     follow_the_gap_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(
-                get_package_share_directory("follow_the_gap"),
+                get_package_share_directory("athena_follow_the_gap"),
                 "launch",
                 "follow_the_gap.launch.py",
             )

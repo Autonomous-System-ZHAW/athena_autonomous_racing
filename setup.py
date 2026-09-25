@@ -23,6 +23,8 @@ setup(
         "test": ["pytest"],
     },
     entry_points={
-        "console_scripts": [],
+        "console_scripts": [
+            "autonomous_racing = athena_autonomous_racing.autonomous_racing_node:main"
+        ],
     },
 )
